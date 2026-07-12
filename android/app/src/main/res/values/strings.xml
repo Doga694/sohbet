@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Sohbet Odası</string>
+    <string name="title_activity_main">Sohbet Odası</string>
+    <string name="package_name">com.sohbetodasi.app</string>
+    <string name="custom_url_scheme">com.sohbetodasi.app</string>
+</resources>

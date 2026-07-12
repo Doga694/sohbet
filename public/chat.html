@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sohbet Odası</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gray-900 text-white h-screen flex flex-col">
+    <div class="bg-gray-800 px-6 py-4 border-b border-gray-700 flex items-center justify-between">
+        <div>
+            <h1 class="text-xl font-bold">Oda: <span id="roomCode" class="text-blue-400"></span></h1>
+            <p class="text-sm text-gray-400">Çevrimiçi: <span id="onlineCount" class="text-green-400">0</span> kişi</p>
+        </div>
+        <div class="flex gap-2">
+            <button id="cameraBtn" class="px-4 py-2 bg-green-500 hover:bg-green-600 rounded-lg transition flex items-center gap-2">
+                📷 Kamera
+            </button>
+            <button id="leaveRoomBtn" class="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg transition">Ayrıl</button>
+        </div>
+    </div>
+
+    <div class="flex-1 flex overflow-hidden">
+        <div class="hidden md:block w-64 bg-gray-800 border-r border-gray-700 p-4 overflow-y-auto">
+            <h3 class="font-semibold mb-3 text-gray-400">Kullanıcılar</h3>
+            <ul id="userList" class="space-y-2"></ul>
+        </div>
+
+        <div class="flex-1 flex flex-col relative">
+            <!-- Kamera Ekranı -->
+            <div id="cameraContainer" class="hidden absolute inset-0 bg-black z-20 flex flex-col">
+                <div class="bg-gray-800 px-4 py-2 flex justify-between items-center">
+                    <span class="font-semibold"> Kamera</span>
+                    <button id="closeCameraBtn" class="text-red-400 hover:text-red-300"> Kapat</button>
+                </div>
+                <video id="cameraVideo" autoplay playsinline class="flex-1 bg-black"></video>
+                <div class="bg-gray-800 p-4 flex justify-center gap-4">
+                    <button id="switchCameraBtn" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg"> Kamera Değiştir</button>
+                    <button id="captureBtn" class="px-4 py-2 bg-purple-500 hover:bg-purple-600 rounded-lg"> Fotoğraf Çek</button>
+                </div>
+            </div>
+
+            <div id="messagesContainer" class="flex-1 overflow-y-auto p-6 space-y-4">
+                <div id="messages"></div>
+            </div>
+
+            <div class="bg-gray-800 border-t border-gray-700 p-4">
+                <div class="flex gap-2">
+                    <input type="text" id="messageInput" placeholder="Mesajınızı yazın..." class="flex-1 px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500">
+                    <button id="sendMessageBtn" class="px-6 py-3 bg-blue-500 hover:bg-blue-600 rounded-lg font-semibold transition">Gönder</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+    <script src="js/chat.js"></script>
+</body>
+</html>

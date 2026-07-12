@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerçek Zamanlı Sohbet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center">
+    <!-- Ana Menü -->
+    <div id="mainMenu" class="container mx-auto px-4 max-w-md">
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+                Sohbet Odası
+            </h1>
+            <p class="text-gray-400">Arkadaşlarınla gerçek zamanlı sohbet et</p>
+        </div>
+
+        <div class="space-y-4">
+            <input 
+                type="text" 
+                id="username" 
+                placeholder="Kullanıcı adın" 
+                class="w-full px-6 py-4 bg-gray-800 border border-gray-700 rounded-xl focus:outline-none focus:border-blue-500 transition"
+            >
+            
+            <button 
+                id="createRoomBtn" 
+                class="w-full px-6 py-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-xl font-semibold transition transform hover:scale-105"
+            >
+                🏠 Oda Yarat
+            </button>
+            
+            <button 
+                id="joinRoomBtn" 
+                class="w-full px-6 py-4 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 rounded-xl font-semibold transition transform hover:scale-105"
+            >
+                🚪 Oda Katıl
+            </button>
+        </div>
+
+        <!-- Oda Katıl Modal -->
+        <div id="joinRoomModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div class="bg-gray-800 rounded-xl p-6 max-w-sm w-full">
+                <h3 class="text-xl font-bold mb-4">Oda Kodu Gir</h3>
+                <input 
+                    type="text" 
+                    id="roomCodeInput" 
+                    placeholder="8 haneli kod" 
+                    maxlength="8"
+                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-purple-500 mb-4 uppercase"
+                >
+                <div class="flex gap-2">
+                    <button 
+                        id="confirmJoinBtn" 
+                        class="flex-1 px-4 py-3 bg-purple-500 hover:bg-purple-600 rounded-lg font-semibold transition"
+                    >
+                        Katıl
+                    </button>
+                    <button 
+                        id="cancelJoinBtn" 
+                        class="flex-1 px-4 py-3 bg-gray-700 hover:bg-gray-600 rounded-lg font-semibold transition"
+                    >
+                        İptal
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Modal -->
+    <div id="adminModal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
+        <div class="admin-modal-content bg-gray-800 bg-opacity-90 backdrop-blur-md border border-gray-700 rounded-2xl p-8 max-w-md w-full shadow-2xl relative">
+            <button id="closeAdminModal" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl transition">✕</button>
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="text-3xl">🔐</span>
+                </div>
+                <h2 class="text-2xl font-bold mb-2">Yönetici Girişi</h2>
+                <p class="text-gray-400 text-sm">Devam etmek için şifrenizi girin</p>
+            </div>
+            <input type="password" id="adminPasswordInput" placeholder="Şifre" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 mb-4 transition">
+            <p id="adminLoginError" class="text-red-400 text-sm mb-4 hidden"></p>
+            <button id="adminLoginBtn" class="w-full px-4 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 rounded-lg font-semibold transition transform hover:scale-105">Giriş Yap</button>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="adminDashboard" class="hidden fixed inset-0 bg-gray-900 p-8 z-40 overflow-y-auto">
+        <div class="container mx-auto max-w-4xl">
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="text-3xl font-bold">Yönetici Paneli</h1>
+                <button id="closeDashboardBtn" class="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg transition">✕ Kapat</button>
+            </div>
+            <div class="bg-gray-800 rounded-xl p-6">
+                <h2 class="text-xl font-semibold mb-4">Aktif Odalar</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="text-left border-b border-gray-700">
+                                <th class="pb-3">Oda Kodu</th>
+                                <th class="pb-3">Kişi Sayısı</th>
+                                <th class="pb-3">Oluşturulma</th>
+                            </tr>
+                        </thead>
+                        <tbody id="roomsTable"></tbody>
+                    </table>
+                </div>
+                <p id="noRooms" class="text-gray-400 text-center py-8 hidden">Aktif oda yok</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Butonu -->
+    <button id="adminBtn" class="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-br from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 rounded-full shadow-lg flex items-center justify-center transition transform hover:scale-110 z-30" title="Yönetici Paneli">
+        <span class="text-2xl">⚙️</span>
+    </button>
+
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
