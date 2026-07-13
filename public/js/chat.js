@@ -1,5 +1,5 @@
 ﻿// public/js/chat.js
-const socket = io();
+const socket = io('https://sohbet-app-ut1r.onrender.com');
 
 const urlParams = new URLSearchParams(window.location.search);
 const roomCode = urlParams.get('room');
@@ -94,3 +94,4 @@ leaveRoomBtn.addEventListener('click', () => {
         window.location.href = '/';
     }
 });
+
