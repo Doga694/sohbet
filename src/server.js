@@ -38,7 +38,7 @@ io.on('connection', (socket) => {
 
   socket.on('join_room', (room) => {
     socket.join(room);
-    console.log(\Kullanıcı \ \ odasına katıldı\);
+    console.log(`Kullanıcı ${socket.id} ${room} odasına katıldı`);
   });
 
   socket.on('chat_message', (data) => {
@@ -55,5 +55,5 @@ io.on('connection', (socket) => {
 });
 
 server.listen(PORT, () => {
-  console.log(\Server çalışıyor: \\);
+  console.log(`Server çalışıyor: ${PORT}`);
 });
