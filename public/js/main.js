@@ -1,5 +1,5 @@
 ﻿// public/js/main.js
-const socket = io();
+const socket = io('https://sohbet-app-ut1r.onrender.com');
 
 const usernameInput = document.getElementById('username');
 const createRoomBtn = document.getElementById('createRoomBtn');
@@ -103,7 +103,7 @@ adminLoginBtn.addEventListener('click', async () => {
     }
     
     try {
-        const response = await fetch('/api/admin/verify', {
+        const response = await fetch('https://sohbet-app-ut1r.onrender.com/api/admin/verify', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ password })
@@ -152,7 +152,7 @@ closeDashboardBtn.addEventListener('click', () => {
 async function loadRooms() {
     if (!isAuthenticated) return;
     try {
-        const response = await fetch('/api/admin/rooms');
+        const response = await fetch('https://sohbet-app-ut1r.onrender.com/api/admin/rooms');
         const data = await response.json();
         if (data.success) {
             if (data.rooms.length === 0) {
@@ -178,4 +178,5 @@ async function loadRooms() {
         console.error('Oda verileri yüklenemedi:', error);
     }
 }
+
 
