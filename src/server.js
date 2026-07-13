@@ -7,38 +7,32 @@ const path = require('path');
 const app = express();
 const server = http.createServer(app);
 
-// Hafif socket.io ayarları (düşük RAM)
 const io = new Server(server, {
   cors: {
     origin: "*",
     methods: ["GET", "POST"]
-  },
-  pingTimeout: 60000,
-  pingInterval: 25000
+  }
 });
 
 const PORT = process.env.PORT || 3000;
 
-// Statik dosyalar
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(cors());
 
-// API endpoint'leri
 app.get('/api/admin/verify', (req, res) => {
   res.json({ success: true });
 });
 
 app.get('/api/admin/rooms', (req, res) => {
-  res.json({ rooms: Array.from(io.sockets.adapter.rooms.keys()) });
+  res.json({ rooms: [] });
 });
 
-// Socket.io olayları (basitleştirilmiş)
 io.on('connection', (socket) => {
-  console.log('Kullanıcı bağlandı:', socket.id);
+  console.log('User connected:', socket.id);
 
   socket.on('join_room', (room) => {
     socket.join(room);
-    console.log(`Kullanıcı ${socket.id} ${room} odasına katıldı`);
+    console.log('User joined room:', room);
   });
 
   socket.on('chat_message', (data) => {
@@ -50,10 +44,10 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    console.log('Kullanıcı ayrıldı:', socket.id);
+    console.log('User disconnected:', socket.id);
   });
 });
 
 server.listen(PORT, () => {
-  console.log(`Server çalışıyor: ${PORT}`);
+  console.log('Server running on port:', PORT);
 });
